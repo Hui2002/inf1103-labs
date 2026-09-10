@@ -6,3 +6,8 @@ while True:
 
     if stock.lower() == "quit":
         break
+     
+    if not stock.isdigit():
+        print("Error: Invalid entries. Please enter a whole number.")
+        failed_entries += 1
+        continue
