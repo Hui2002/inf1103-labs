@@ -3,9 +3,6 @@ failed_entries = 0
 
 while True:
     stock = input("Enter stock quantity (or 'quit' to end): ")
-
-    if stock.lower() == "quit":
-        break
      
     if not stock.isdigit():
         print("Error: Invalid entries. Please enter a whole number.")
@@ -23,3 +20,13 @@ while True:
 
     print("Stock has been successfully added.")
     print("Current inventory:", inventory)
+
+    if inventory > 500:
+        print("Warning: Inventory exceeds 500 units.")
+        break
+
+    if stock.lower() == "quit":
+        print("--- Inventory Report ---")
+        print("Total Stock Processed:", inventory)
+        print("Number of Failed/Rejected Entries:", failed_entries) 
+        break
