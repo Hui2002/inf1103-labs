@@ -13,8 +13,13 @@ while True:
         continue
 
     stock = int(stock)
-    
+
     if stock < 0:
         print("Error: Negative stock entries input are not allowed.")
         failed_entries += 1
         continue
+
+    inventory += stock
+
+    print("Stock has been successfully added.")
+    print("Current inventory:", inventory)
