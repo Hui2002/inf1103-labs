@@ -26,7 +26,8 @@ while True:
         break
 
     if stock.lower() == "quit":
-        print("--- Inventory Report ---")
-        print("Total Stock Processed:", inventory)
-        print("Number of Failed/Rejected Entries:", failed_entries) 
+        print("\n--- Inventory Report ---")
+        print("Total Units Processed:", inventory)
+        print("Number of Failed/Rejected Entries:", failed_entries)
         break
+
