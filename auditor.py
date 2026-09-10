@@ -11,3 +11,10 @@ while True:
         print("Error: Invalid entries. Please enter a whole number.")
         failed_entries += 1
         continue
+
+    stock = int(stock)
+    
+    if stock < 0:
+        print("Error: Negative stock entries input are not allowed.")
+        failed_entries += 1
+        continue
