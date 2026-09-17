@@ -16,3 +16,6 @@ def process_delivery(current_total, new_value):
     """Calculates and returns the updated running total."""
     return current_total + new_value
 
+def calculate_tax(amount):
+    """Calculates 10% tax for a specific delivery amount."""
+    return amount * 0.10
