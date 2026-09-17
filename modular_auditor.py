@@ -9,5 +9,10 @@ def get_valid_input():
         if user_input.isdigit():
             return int(user_input)
         else:
-            print("Error: Invalid entry. Please enter a whole positive number.")
+            print("Error: Invalid entry. Please enter a whole positive number.1")
             return None  
+
+def process_delivery(current_total, new_value):
+    """Calculates and returns the updated running total."""
+    return current_total + new_value
+
