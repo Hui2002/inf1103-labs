@@ -117,3 +117,54 @@ def get_valid_input(failed_attempts_tracker, next_id):
         else:
             print("Error: Invalid entry. Please enter a whole positive number.")
             failed_attempts_tracker += 1
+
+def main():
+    # 1. Load initial state
+    inventory, transaction_history = load_inventory()
+    orders = load_orders()
+    failed_entries = 0
+
+    # Display loaded orders
+    display_orders(orders)
+
+    while True:
+        next_id = 1001 if not orders else max(order[0] for order in orders) + 1
+
+        product_name, quantity, failed_entries = get_valid_input(failed_entries, next_id)
+
+        # Check for quit signal
+        if product_name == "quit":
+            generate_report(inventory, failed_entries, transaction_history, orders)
+            save_inventory(inventory, transaction_history)
+            save_orders(orders)
+            break
+
+        # 2. Track Order History
+        new_order = (next_id, product_name, quantity)
+        orders.append(new_order)
+        transaction_history.append(quantity)
+
+        # Calculate values
+        inventory = process_delivery(inventory, quantity)
+        tax = calculate_tax(quantity)
+
+        print("\nNew Order Added:")
+        print(f"{new_order[0]},{new_order[1]},{new_order[2]}")
+        print(f"Tax for this delivery (10%): {tax:.2f}")
+        print("Current inventory total:", inventory)
+
+        # Save updates to orders.txt
+        save_orders(orders)
+        print()
+
+        # Check max capacity threshold
+        if inventory > 500:
+            print("\nWarning: Inventory exceeds 500 units.")
+            generate_report(inventory, failed_entries, transaction_history, orders)
+            save_inventory(inventory, transaction_history)
+            save_orders(orders)
+            break
+
+
+if __name__ == "__main__":
+    main()
