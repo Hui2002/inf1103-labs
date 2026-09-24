@@ -33,3 +33,28 @@ def save_inventory(total_units, history_list):
         print(f"Inventory data successfully saved to {INVENTORY_FILE}")
     except IOError as e:
         print(f"Error saving inventory file: {e}")
+
+def load_orders():
+    orders = []
+    if os.path.exists(ORDERS_FILE):
+        try:
+            with open(ORDERS_FILE, "r") as file:
+                for line in file:
+                    line = line.strip()
+                    if line:
+                        parts = line.split(",")
+                        if len(parts) == 3:
+                            order_id = int(parts[0].strip())
+                            product_name = parts[1].strip()
+                            quantity = int(parts[2].strip())
+                            orders.append((order_id, product_name, quantity))
+        except (ValueError, IOError):
+            orders = []
+
+    if not orders:
+        orders = [
+            (1001, "Wireless Mouse", 2),
+            (1002, "Keyboard", 1),
+            (1003, "USB Cable", 3),
+        ]
+    return orders
