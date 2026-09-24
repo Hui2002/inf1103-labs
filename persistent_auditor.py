@@ -58,3 +58,13 @@ def load_orders():
             (1003, "USB Cable", 3),
         ]
     return orders
+
+def save_orders(orders):
+    """Saves all structured order records to orders.txt."""
+    try:
+        with open(ORDERS_FILE, "w") as file:
+            for order_id, product_name, quantity in orders:
+                file.write(f"{order_id},{product_name},{quantity}\n")
+        print(f"Order successfully saved to {ORDERS_FILE}")
+    except IOError as e:
+        print(f"Error saving orders file: {e}") 
