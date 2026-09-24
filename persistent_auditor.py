@@ -96,3 +96,24 @@ def generate_report(total_units, failed_attempts, history, orders):
     print("\nAll Logged Orders:")
     for order_id, product_name, quantity in orders:
         print(f"  ID: {order_id} | Product: {product_name} | Quantity: {quantity}")
+
+
+def get_valid_input(failed_attempts_tracker, next_id):
+    """Collects input for Product Name & Quantity, or handles 'quit' signal."""
+    product_name = input("Enter Product Name (or 'quit' to end): ").strip()
+
+    if product_name.lower() == "quit":
+        return "quit", None, failed_attempts_tracker
+
+    while True:
+        quantity_input = input("Enter Quantity: ").strip()
+
+        if quantity_input.lower() == "quit":
+            return "quit", None, failed_attempts_tracker
+
+        if quantity_input.isdigit() and int(quantity_input) > 0:
+            quantity = int(quantity_input)
+            return product_name, quantity, failed_attempts_tracker
+        else:
+            print("Error: Invalid entry. Please enter a whole positive number.")
+            failed_attempts_tracker += 1
