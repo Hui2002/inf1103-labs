@@ -20,6 +20,16 @@ def load_inventory():
     except (ValueError, IOError):
         return 0, []
 
+def save_inventory(total_units, history_list):
+    """Saves the final running total and transaction history to the inventory file."""
+    try:
+        with open(FILENAME, "w") as file:
+            file.write(f"{total_units}\n")
+            file.write(",".join(str(val) for val in history_list) + "\n")
+        print(f"Data successfully saved to {FILENAME}")
+    except IOError as e:
+        print(f"Error saving to file: {e}")
+
 
 def get_valid_input(failed_attempts_tracker):
     """Handles prompt, input validation, and returns an integer or 'quit' signal."""
