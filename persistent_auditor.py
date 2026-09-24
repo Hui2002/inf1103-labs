@@ -21,7 +21,6 @@ def load_inventory():
         return 0, []
 
 def save_inventory(total_units, history_list):
-    """Saves the final running total and transaction history to the inventory file."""
     try:
         with open(FILENAME, "w") as file:
             file.write(f"{total_units}\n")
@@ -29,6 +28,19 @@ def save_inventory(total_units, history_list):
         print(f"Data successfully saved to {FILENAME}")
     except IOError as e:
         print(f"Error saving to file: {e}")
+
+def get_valid_input():
+    """Handles prompt, input validation, and returns an integer or 'quit' signal."""
+    while True:
+        user_input = input("Enter stock quantity (or 'quit' to end): ").strip()
+
+        if user_input.lower() == "quit":
+            return "quit"
+
+        if user_input.isdigit():
+            return int(user_input)
+        else:
+            print("Error: Invalid entry. Please enter a whole positive number.")
 
 
 def get_valid_input(failed_attempts_tracker):
