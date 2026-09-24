@@ -68,3 +68,31 @@ def save_orders(orders):
         print(f"Order successfully saved to {ORDERS_FILE}")
     except IOError as e:
         print(f"Error saving orders file: {e}") 
+
+def display_orders(orders):
+    """Prints the current active orders matching requirement formatting."""
+    print("Current Orders:\n")
+    if not orders:
+        print("No existing orders found.\n")
+    else:
+        for order_id, product_name, quantity in orders:
+            print(f"{order_id}, {product_name}, {quantity}")
+        print()
+
+
+def process_delivery(current_total, new_value):
+    return current_total + new_value
+
+
+def calculate_tax(amount):
+    return amount * 0.10
+
+
+def generate_report(total_units, failed_attempts, history, orders):
+    print("\n--- Inventory Report ---")
+    print("Total Units Processed:", total_units)
+    print("Number of Failed/Rejected Entries:", failed_attempts)
+    print("Quantity History List:", history)
+    print("\nAll Logged Orders:")
+    for order_id, product_name, quantity in orders:
+        print(f"  ID: {order_id} | Product: {product_name} | Quantity: {quantity}")
