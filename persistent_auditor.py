@@ -1,3 +1,26 @@
+import os
+FILENAME = "inventory.txt"
+
+def load_inventory():
+    """Reads inventory total and history list from file if it exists."""
+    if not os.path.exists(FILENAME):
+        return 0, []
+
+    try:
+        with open(FILENAME, "r") as file:
+            lines = [line.strip() for line in file.readlines() if line.strip()]
+            
+            total = int(lines[0]) if len(lines) > 0 else 0
+            
+            history = []
+            if len(lines) > 1 and lines[1]:
+                history = [int(val) for val in lines[1].split(",") if val.isdigit()]
+                
+            return total, history
+    except (ValueError, IOError):
+        return 0, []
+
+
 def get_valid_input(failed_attempts_tracker):
     """Handles prompt, input validation, and returns an integer or 'quit' signal."""
     while True:
