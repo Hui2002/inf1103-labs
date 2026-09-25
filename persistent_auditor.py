@@ -35,6 +35,16 @@ def save_inventory(orders):
     except IOError as e:
         print(f"Error saving to file: {e}")
 
+def display_orders(orders):
+    """Displays current loaded orders matching the exact terminal output format."""
+    print("Current Orders:")
+    if not orders:
+        print("  (No previous orders found)")
+    else:
+        for order_id, product_name, quantity in orders:
+            print(f"  {order_id}, {product_name}, {quantity}")
+    print()
+
 def load_orders():
     orders = []
     if os.path.exists(ORDERS_FILE):
