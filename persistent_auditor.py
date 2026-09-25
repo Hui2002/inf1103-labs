@@ -45,6 +45,10 @@ def display_orders(orders):
             print(f"  {order_id}, {product_name}, {quantity}")
     print()
 
+def calculate_tax(amount):
+    """Calculates 10% tax based on $0.10 per unit."""
+    return amount * 0.10
+
 def load_orders():
     orders = []
     if os.path.exists(ORDERS_FILE):
