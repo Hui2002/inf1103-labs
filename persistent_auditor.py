@@ -124,7 +124,6 @@ def main():
     orders = load_orders()
     failed_entries = 0
 
-    # Display loaded orders
     display_orders(orders)
 
     while True:
@@ -132,14 +131,12 @@ def main():
 
         product_name, quantity, failed_entries = get_valid_input(failed_entries, next_id)
 
-        # Check for quit signal
         if product_name == "quit":
             generate_report(inventory, failed_entries, transaction_history, orders)
             save_inventory(inventory, transaction_history)
             save_orders(orders)
             break
 
-        # 2. Track Order History
         new_order = (next_id, product_name, quantity)
         orders.append(new_order)
         transaction_history.append(quantity)
@@ -150,8 +147,7 @@ def main():
 
         print("\nNew Order Added:")
         print(f"{new_order[0]},{new_order[1]},{new_order[2]}")
-        print(f"Tax for this delivery (10%): {tax:.2f}")
-        print("Current inventory total:", inventory)
+
 
         # Save updates to orders.txt
         save_orders(orders)
