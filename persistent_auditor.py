@@ -1,59 +1,14 @@
 import os
 
-INVENTORY_FILE = "inventory.txt"
-ORDERS_FILE = "orders.txt"
+FILENAME = "inventory.txt"
+
 
 def load_inventory():
-    if not os.path.exists(INVENTORY_FILE):
-        return 0, []
-
-    try:
-        with open(INVENTORY_FILE, "r") as file:
-            lines = [line.strip() for line in file if line.strip()]
-
-            total = int(lines[0]) if len(lines) > 0 and lines[0].isdigit() else 0
-
-            history = []
-            if len(lines) > 1 and lines[1]:
-                history = [
-                    int(val.strip())
-                    for val in lines[1].split(",")
-                    if val.strip().isdigit()
-                ]
-
-            return total, history
-    except (ValueError, IOError):
-        return 0, []
-
-def save_inventory(orders):
-    """Saves all order records to inventory.txt."""
-    try:
-        with open(INVENTORY_FILE, "w") as file:
-            for order_id, product_name, quantity in orders:
-                file.write(f"{order_id},{product_name},{quantity}\n")
-        print("Order successfully saved to inventory.txt")
-    except IOError as e:
-        print(f"Error saving to file: {e}")
-
-def display_orders(orders):
-    """Displays current loaded orders matching the exact terminal output format."""
-    print("Current Orders:")
-    if not orders:
-        print("  (No previous orders found)")
-    else:
-        for order_id, product_name, quantity in orders:
-            print(f"  {order_id}, {product_name}, {quantity}")
-    print()
-
-def calculate_tax(amount):
-    """Calculates 10% tax based on $0.10 per unit."""
-    return amount * 0.10
-
-def load_orders():
+    """Reads saved order records from inventory.txt if present."""
     orders = []
-    if os.path.exists(ORDERS_FILE):
+    if os.path.exists(FILENAME):
         try:
-            with open(ORDERS_FILE, "r") as file:
+            with open(FILENAME, "r") as file:
                 for line in file:
                     line = line.strip()
                     if line:
@@ -65,116 +20,89 @@ def load_orders():
                             orders.append((order_id, product_name, quantity))
         except (ValueError, IOError):
             orders = []
-
-    if not orders:
-        orders = [
-            (1001, "Wireless Mouse", 2),
-            (1002, "Keyboard", 1),
-            (1003, "USB Cable", 3),
-        ]
     return orders
 
-def save_orders(orders):
-    """Saves all structured order records to orders.txt."""
+
+def save_inventory(orders):
+    """Saves all order records to inventory.txt."""
     try:
-        with open(ORDERS_FILE, "w") as file:
+        with open(FILENAME, "w") as file:
             for order_id, product_name, quantity in orders:
                 file.write(f"{order_id},{product_name},{quantity}\n")
-        print(f"Order successfully saved to {ORDERS_FILE}")
+        print("Order successfully saved to inventory.txt")
     except IOError as e:
-        print(f"Error saving orders file: {e}") 
+        print(f"Error saving to file: {e}")
+
 
 def display_orders(orders):
-    """Prints the current active orders matching requirement formatting."""
-    print("Current Orders:\n")
+    """Displays current loaded orders matching the exact terminal output format."""
+    print("Current Orders:")
     if not orders:
-        print("No existing orders found.\n")
+        print("  (No previous orders found)")
     else:
         for order_id, product_name, quantity in orders:
-            print(f"{order_id}, {product_name}, {quantity}")
-        print()
-
-
-def process_delivery(current_total, new_value):
-    return current_total + new_value
+            print(f"  {order_id}, {product_name}, {quantity}")
+    print()
 
 
 def calculate_tax(amount):
+    """Calculates 10% tax based on $0.10 per unit."""
     return amount * 0.10
 
 
-def generate_report(total_units, failed_attempts, history, orders):
-    print("\n--- Inventory Report ---")
-    print("Total Units Processed:", total_units)
-    print("Number of Failed/Rejected Entries:", failed_attempts)
-    print("Quantity History List:", history)
-    print("\nAll Logged Orders:")
-    for order_id, product_name, quantity in orders:
-        print(f"  ID: {order_id} | Product: {product_name} | Quantity: {quantity}")
+def generate_report(orders, failed_attempts):
+    """Prints the === Audit Report === section matching the image exactly."""
+    total_transactions = len(orders)
+    total_units = sum(order[2] for order in orders)
 
+    print("\n=== Audit Report ===")
+    print(f"Total Transactions Recorded: {total_transactions}")
+    print(f"Total Units Processed: {total_units}")
+    print(f"Number of Failed/Rejected Entries: {failed_attempts}")
 
-def get_valid_input(failed_attempts_tracker, next_id):
-    """Collects input for Product Name & Quantity, or handles 'quit' signal."""
-    product_name = input("Enter Product Name (or 'quit' to end): ").strip()
-
-    if product_name.lower() == "quit":
-        return "quit", None, failed_attempts_tracker
-
-    while True:
-        quantity_input = input("Enter Quantity: ").strip()
-
-        if quantity_input.lower() == "quit":
-            return "quit", None, failed_attempts_tracker
-
-        if quantity_input.isdigit() and int(quantity_input) > 0:
-            quantity = int(quantity_input)
-            return product_name, quantity, failed_attempts_tracker
-        else:
-            print("Error: Invalid entry. Please enter a whole positive number.")
-            failed_attempts_tracker += 1
 
 def main():
-    # 1. Load initial state
-    inventory, transaction_history = load_inventory()
-    orders = load_orders()
-    failed_entries = 0
-
+    orders = load_inventory()
     display_orders(orders)
 
+    failed_entries = 0
+
     while True:
-        next_id = 1001 if not orders else max(order[0] for order in orders) + 1
+        product_name = input("Enter Product Name (or 'quit' to exit): ").strip()
 
-        product_name, quantity, failed_entries = get_valid_input(failed_entries, next_id)
-
-        if product_name == "quit":
-            generate_report(inventory, failed_entries, transaction_history, orders)
-            save_inventory(inventory, transaction_history)
-            save_orders(orders)
+        if product_name.lower() == "quit":
+            save_inventory(orders)
+            generate_report(orders, failed_entries)
             break
 
+        # Input validation for quantity
+        while True:
+            quantity_input = input("Enter Quantity: ").strip()
+            
+            if quantity_input.lower() == "quit":
+                save_inventory(orders)
+                generate_report(orders, failed_entries)
+                return
+
+            if quantity_input.isdigit() and int(quantity_input) > 0:
+                quantity = int(quantity_input)
+                break
+            else:
+                print("Error: Invalid entry. Please enter a whole positive number.")
+                failed_entries += 1
+
+        # Calculate next Order ID starting at 1001
+        next_id = 1001 if not orders else max(order[0] for order in orders) + 1
         new_order = (next_id, product_name, quantity)
         orders.append(new_order)
-        transaction_history.append(quantity)
 
-        # Calculate values
-        inventory = process_delivery(inventory, quantity)
+        # Output formatting matching image
         tax = calculate_tax(quantity)
+        total_inventory = sum(order[2] for order in orders)
 
         print("\nNew Order Added:")
-        print(f"{new_order[0]},{new_order[1]},{new_order[2]}")
-
-
-        # Save updates to orders.txt
-        save_orders(orders)
-        print()
-
-        # Check max capacity threshold
-        if inventory > 500:
-            print("\nWarning: Inventory exceeds 500 units.")
-            generate_report(inventory, failed_entries, transaction_history, orders)
-            save_inventory(inventory, transaction_history)
-            save_orders(orders)
-            break
+        print(f"{new_order[0]}, {new_order[1]}, {new_order[2]}")
+        print(f"Tax: ${tax:.2f} | Total Inventory: {total_inventory}\n")
 
 
 if __name__ == "__main__":
