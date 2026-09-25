@@ -25,14 +25,15 @@ def load_inventory():
     except (ValueError, IOError):
         return 0, []
 
-def save_inventory(total_units, history_list):
+def save_inventory(orders):
+    """Saves all order records to inventory.txt."""
     try:
         with open(INVENTORY_FILE, "w") as file:
-            file.write(f"{total_units}\n")
-            file.write(",".join(str(val) for val in history_list) + "\n")
-        print(f"Inventory data successfully saved to {INVENTORY_FILE}")
+            for order_id, product_name, quantity in orders:
+                file.write(f"{order_id},{product_name},{quantity}\n")
+        print("Order successfully saved to inventory.txt")
     except IOError as e:
-        print(f"Error saving inventory file: {e}")
+        print(f"Error saving to file: {e}")
 
 def load_orders():
     orders = []
