@@ -1,1 +1,2 @@
 1001,Keyboard,1
+1002,laptop,1
