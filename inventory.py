@@ -36,3 +36,7 @@ class Inventory:
                 )
 
         print("------------------------------------------")
+
+
+    def get_products(self):
+        return self.__products.copy()

@@ -1,5 +1,6 @@
 from product import Product
 from inventory import Inventory
+from file_handler import load_inventory, save_inventory
 
 
 def display_menu():
@@ -83,8 +84,8 @@ def main():
     print("==========================================")
     print("INVENTORY MANAGEMENT SYSTEM")
     print("==========================================")
-
-    inventory = Inventory()
+    
+    inventory = load_inventory()
 
     while True:
         display_menu()
@@ -104,6 +105,12 @@ def main():
             search_product(inventory)
 
         elif option == "5":
+            save_inventory(inventory)
+
+        elif option == "6":
+            print("\nSaving inventory before exit...")
+            save_inventory(inventory)
+            
             print("\nThank you for using Inventory Management System.")
             print("Program terminated.")
             break
