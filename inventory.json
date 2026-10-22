@@ -28,5 +28,17 @@
         "name": "Speaker",
         "price": 50.0,
         "stock": 10
+    },
+    {
+        "id": "P006",
+        "name": "Webcam",
+        "price": 80.0,
+        "stock": 20
+    },
+    {
+        "id": "P007",
+        "name": "Charging Cable",
+        "price": 50.0,
+        "stock": 5
     }
 ]
