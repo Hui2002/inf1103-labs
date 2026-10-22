@@ -24,7 +24,7 @@ def load_inventory():
             {
                 "id": "P001",
                 "name": "Laptop",
-                "price": 1200.0,
+                "price": 1200.00,
                 "stock": 15
             },
             {
