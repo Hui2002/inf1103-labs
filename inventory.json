@@ -3,42 +3,72 @@
         "id": "P001",
         "name": "Laptop",
         "price": 1200.0,
-        "stock": 15
+        "stock": 15,
+        "type": "physical",
+        "weight": 0.0
     },
     {
         "id": "P002",
         "name": "Mouse",
         "price": 25.5,
-        "stock": 60
+        "stock": 60,
+        "type": "physical",
+        "weight": 0.0
     },
     {
         "id": "P003",
         "name": "Keyboard",
         "price": 45.0,
-        "stock": 25
+        "stock": 25,
+        "type": "physical",
+        "weight": 0.0
     },
     {
         "id": "P004",
         "name": "Monitor",
         "price": 299.99,
-        "stock": 10
+        "stock": 10,
+        "type": "physical",
+        "weight": 0.0
     },
     {
         "id": "P005",
         "name": "Speaker",
         "price": 50.0,
-        "stock": 10
+        "stock": 10,
+        "type": "physical",
+        "weight": 0.0
     },
     {
         "id": "P006",
         "name": "Webcam",
         "price": 80.0,
-        "stock": 20
+        "stock": 20,
+        "type": "physical",
+        "weight": 0.0
     },
     {
         "id": "P007",
         "name": "Charging Cable",
         "price": 50.0,
-        "stock": 5
+        "stock": 5,
+        "type": "physical",
+        "weight": 0.0
+    },
+    {
+        "id": "P101",
+        "name": "Guitar",
+        "price": 500.0,
+        "stock": 10,
+        "type": "physical",
+        "weight": 2.5
+    },
+    {
+        "id": "D201",
+        "name": "antiviuris",
+        "price": 79.9,
+        "stock": 100,
+        "type": "digital",
+        "download_size": 1500.0
     }
 ]

@@ -1,7 +1,7 @@
-from product import Product
-from inventory import Inventory
 from file_handler import load_inventory, save_inventory
-
+from physical_product import PhysicalProduct
+from digital_product import DigitalProduct
+from file_handler import load_inventory, save_inventory
 
 def display_menu():
     print("\n---------- MENU ----------")
@@ -14,11 +14,20 @@ def display_menu():
     print("--------------------------")
 
 
+
 def add_product(inventory):
     print("\nAdd New Product")
+    print("1. Physical Product")
+    print("2. Digital Product")
 
-    product_id = input("Product ID: ")
-    product_name = input("Product Name: ")
+    product_type = input("Select product type: ").strip()
+
+    if product_type not in ("1", "2"):
+        print("Invalid product type.")
+        return
+
+    product_id = input("Product ID: ").strip()
+    product_name = input("Product Name: ").strip()
 
     if inventory.search_product(product_id) is not None:
         print("Product ID already exists.")
@@ -28,13 +37,34 @@ def add_product(inventory):
         price = float(input("Price: "))
         stock = int(input("Stock Quantity: "))
 
-        product = Product(product_id, product_name, price, stock)
+        if product_type == "1":
+            weight = float(input("Weight (kg): "))
+
+            product = PhysicalProduct(
+                product_id,
+                product_name,
+                price,
+                stock,
+                weight
+            )
+
+        elif product_type == "2":
+            download_size = float(input("Download Size (MB): "))
+
+            product = DigitalProduct(
+                product_id,
+                product_name,
+                price,
+                stock,
+                download_size
+            )
 
         if inventory.add_product(product):
             print("\nProduct added successfully!")
 
-    except ValueError:
-        print("Invalid price or stock quantity.")
+    except ValueError as error:
+        print(f"Invalid product details: {error}")
+
 
 
 def update_stock(inventory):
@@ -65,7 +95,7 @@ def update_stock(inventory):
 def search_product(inventory):
     print("\nSearch Product")
 
-    product_id = input("Enter Product ID: ")
+    product_id = input("Enter Product ID: ").strip()
     product = inventory.search_product(product_id)
 
     if product is None:
@@ -74,10 +104,9 @@ def search_product(inventory):
 
     print("\nProduct Found")
     print("------------------------------------------")
-    print(f"ID: {product.get_id()}")
-    print(f"Name: {product.get_name()}")
-    print(f"Price: ${product.get_price():.2f}")
-    print(f"Stock: {product.get_stock()}")
+
+    product.display_information()
+
     print("------------------------------------------")
 
 def main():
@@ -105,6 +134,7 @@ def main():
             search_product(inventory)
 
         elif option == "5":
+            print("\nSaving inventory...")
             save_inventory(inventory)
 
         elif option == "6":

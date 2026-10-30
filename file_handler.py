@@ -37,11 +37,6 @@ def load_inventory():
             product_type = item.get("type", "physical")
 
             if product_type == "physical":
-                if "type" not in item or "weight" not in item:
-                    print(
-                        f"Note: {item['id']} has no saved weight. "
-                        "Using 0.0 kg temporarily."
-                    )
 
                 product = PhysicalProduct(
                     item["id"],
@@ -67,7 +62,6 @@ def load_inventory():
             if not inventory.add_product(product):
                 raise ValueError("Duplicate product ID in JSON.")
 
-        print("Inventory loaded successfully.")
         return inventory
 
     except (OSError, ValueError, TypeError, KeyError) as error:
