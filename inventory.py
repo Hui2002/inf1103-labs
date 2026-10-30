@@ -21,21 +21,17 @@ class Inventory:
 
     def display_all(self):
         print("\nCurrent Inventory")
+
+        if not self.__products:
+            print("No product found")
+            return
+
+        for product in self.__products:
+            print("------------------------------------------")
+            product.display_information()
+            
         print("------------------------------------------")
 
-        if len(self.__products) == 0:
-            print("No products found.")
-
-        else:
-            for product in self.__products:
-                print(
-                    f"ID: {product.get_id()} | "
-                    f"Name: {product.get_name()} | "
-                    f"Price: ${product.get_price():.2f} | "
-                    f"Stock: {product.get_stock()}"
-                )
-
-        print("------------------------------------------")
 
 
     def get_products(self):
