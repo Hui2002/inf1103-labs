@@ -1,5 +1,11 @@
+from abc import ABC, abstractmethod
 
-class Product:
+class Product(ABC):
+
+    @abstractmethod
+    def get_fulfilment_info(self):
+        pass
+    
     def __init__(self, product_id, name, price, stock):
         if price < 0:
             raise ValueError("Price cannot be negative.")
