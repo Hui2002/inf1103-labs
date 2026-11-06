@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from supplier import Supplier
 
 class Product(ABC):
 
@@ -6,7 +7,9 @@ class Product(ABC):
     def get_fulfilment_info(self):
         pass
     
-    def __init__(self, product_id, name, price, stock):
+
+    def __init__(self,product_id: str,name: str,price: float,stock: int,supplier: Supplier) -> None:
+
         if price < 0:
             raise ValueError("Price cannot be negative.")
 
@@ -17,6 +20,10 @@ class Product(ABC):
         self.__name = name
         self.__price = price
         self.__stock = stock
+        self.__supplier: Supplier = supplier
+
+    def get_supplier(self) -> Supplier:
+        return self.__supplier
 
     def get_id(self):
         return self.__id
