@@ -1,83 +1,112 @@
 import os
 import json
 
-from product import Product
+from supplier import Supplier
 from inventory import Inventory
 from physical_product import PhysicalProduct
 from digital_product import DigitalProduct
 
 FILENAME = "inventory.json"
 
-def load_inventory():
+def load_inventory() -> Inventory:
     inventory = Inventory()
 
+    # Create default products if no JSON file exists
     if not os.path.exists(FILENAME):
-        print("inventory.json not found.")
-        print("Starting with default inventory.")
+        supplier = Supplier("UNKNOWN", "Unassigned", "")
 
         inventory.add_product(
-            PhysicalProduct("P001", "Laptop", 1200.00, 15, 0.0)
+            PhysicalProduct("P001", "Laptop", 1200.00, 15, 0.0, supplier)
         )
         inventory.add_product(
-            PhysicalProduct("P002", "Mouse", 25.50, 40, 0.0)
+            PhysicalProduct("P002", "Mouse", 25.50, 40, 0.0, supplier)
         )
         inventory.add_product(
-            PhysicalProduct("P003", "Keyboard", 45.00, 25, 0.0)
+            PhysicalProduct("P003", "Keyboard", 45.00, 25, 0.0, supplier)
         )
 
         return inventory
-    try:
-        with open(FILENAME, "r") as file:
-            data = json.load(file)
 
-        if not isinstance(data, list):
-            raise ValueError("Inventory JSON must contain a list.")
+    with open(FILENAME, "r") as file:
+        data = json.load(file)
 
-        for item in data:
-            product_type = item.get("type", "physical")
+    if not isinstance(data, list):
+        raise ValueError("Inventory JSON must contain a list.")
 
-            if product_type == "physical":
+    # Reuse Supplier objects with the same supplier ID
+    suppliers: dict[str, Supplier] = {}
 
-                product = PhysicalProduct(
-                    item["id"],
-                    item["name"],
-                    item["price"],
-                    item["stock"],
-                    item.get("weight", 0.0)
-                )
-            
-            elif product_type == 'digital':
-                product = DigitalProduct(
-                    item["id"],
-                    item["name"],
-                    item["price"],
-                    item["stock"],
-                    item["download_size"]
-                )
-            else:
-                raise ValueError(
-                    f"Unknown product type: {product_type}"
-                )
+    for item in data:
+        product_type = item.get("type", "physical").strip().lower()
 
-            if not inventory.add_product(product):
-                raise ValueError("Duplicate product ID in JSON.")
+        # Support older Lab 7 records without supplier details
+        supplier_data = item.get("supplier")
 
-        return inventory
+        if supplier_data is None:
+            supplier_data = {
+                "supplier_id": "UNKNOWN",
+                "name": "Unassigned",
+                "contact_email": ""
+            }
 
-    except (OSError, ValueError, TypeError, KeyError) as error:
-        print(f"Error loading inventory: {error}")
-        raise
+        supplier_id = supplier_data["supplier_id"]
+
+        if supplier_id not in suppliers:
+            suppliers[supplier_id] = Supplier(
+                supplier_id,
+                supplier_data["name"],
+                supplier_data["contact_email"]
+            )
+
+        supplier = suppliers[supplier_id]
+
+        if product_type == "physical":
+            product = PhysicalProduct(
+                item["id"],
+                item["name"],
+                item["price"],
+                item["stock"],
+                item.get("weight", 0.0),
+                supplier
+            )
+
+        elif product_type == "digital":
+            product = DigitalProduct(
+                item["id"],
+                item["name"],
+                item["price"],
+                item["stock"],
+                item["download_size"],
+                supplier
+            )
+
+        else:
+            raise ValueError(
+                f"Unknown product type: {product_type}"
+            )
+
+        if not inventory.add_product(product):
+            raise ValueError("Duplicate product ID in JSON.")
+
+    return inventory
 
 
-def save_inventory(inventory):
+def save_inventory(inventory: Inventory) -> bool:
     data = []
 
     for product in inventory.get_products():
+        supplier = product.get_supplier()
+
         product_data = {
             "id": product.get_id(),
             "name": product.get_name(),
             "price": product.get_price(),
-            "stock": product.get_stock()
+            "stock": product.get_stock(),
+            "supplier": {
+                "supplier_id": supplier.get_supplier_id(),
+                "name": supplier.get_name(),
+                "contact_email": supplier.get_contact_email()
+            }
         }
 
         if isinstance(product, PhysicalProduct):
@@ -97,9 +126,9 @@ def save_inventory(inventory):
         with open(FILENAME, "w") as file:
             json.dump(data, file, indent=4)
 
-        print("Inventory saved successfully to inventory.json.")
+        print("Inventory saved successfully.")
         return True
 
-    except OSError:
+    except OSError as error:
         print(f"Error saving inventory: {error}")
         return False
