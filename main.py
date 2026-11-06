@@ -1,6 +1,9 @@
-from file_handler import load_inventory, save_inventory
+from itertools import product
+
+from supplier import Supplier
 from physical_product import PhysicalProduct
 from digital_product import DigitalProduct
+from inventory import Inventory
 from file_handler import load_inventory, save_inventory
 
 def display_menu():
@@ -14,8 +17,7 @@ def display_menu():
     print("--------------------------")
 
 
-
-def add_product(inventory):
+def add_product(inventory: Inventory) -> None:
     print("\nAdd New Product")
     print("1. Physical Product")
     print("2. Digital Product")
@@ -29,9 +31,46 @@ def add_product(inventory):
     product_id = input("Product ID: ").strip()
     product_name = input("Product Name: ").strip()
 
-    if inventory.search_product(product_id) is not None:
+    if not product_id or not product_name:
+        print("Product ID and name cannot be empty.")
+        return
+
+    if inventory.find_product(product_id) is not None:
         print("Product ID already exists.")
         return
+
+    # Get supplier information
+    supplier_id = input("Supplier ID: ").strip()
+
+    if not supplier_id:
+        print("Supplier ID cannot be empty.")
+        return
+
+    supplier = None
+
+    # Check whether the supplier already exists
+    for existing_product in inventory.get_products():
+        existing_supplier = existing_product.get_supplier()
+
+        if existing_supplier.get_supplier_id() == supplier_id:
+            supplier = existing_supplier
+            break
+
+    if supplier is None:
+        supplier_name = input("Supplier Name: ").strip()
+        supplier_email = input("Supplier Email: ").strip()
+
+        if not supplier_name or not supplier_email:
+            print("Supplier name and email cannot be empty.")
+            return
+
+        supplier = Supplier(
+            supplier_id,
+            supplier_name,
+            supplier_email
+        )
+    else:
+        print("Existing supplier found and reused.")
 
     try:
         price = float(input("Price: "))
@@ -45,10 +84,11 @@ def add_product(inventory):
                 product_name,
                 price,
                 stock,
-                weight
+                weight,
+                supplier
             )
 
-        elif product_type == "2":
+        else:
             download_size = float(input("Download Size (MB): "))
 
             product = DigitalProduct(
@@ -56,14 +96,18 @@ def add_product(inventory):
                 product_name,
                 price,
                 stock,
-                download_size
+                download_size,
+                supplier
             )
 
         if inventory.add_product(product):
             print("\nProduct added successfully!")
+        else:
+            print("\nUnable to add product.")
 
     except ValueError as error:
         print(f"Invalid product details: {error}")
+
 
 
 
@@ -106,6 +150,8 @@ def search_product(inventory):
     print("------------------------------------------")
 
     product.display_information()
+    print("\nSupplier Information:")
+    product.get_supplier().display_information()
 
     print("------------------------------------------")
 

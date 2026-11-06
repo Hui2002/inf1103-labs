@@ -4,6 +4,11 @@
         "name": "Laptop",
         "price": 1200.0,
         "stock": 15,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.0
     },
@@ -12,6 +17,11 @@
         "name": "Mouse",
         "price": 25.5,
         "stock": 60,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.0
     },
@@ -20,6 +30,11 @@
         "name": "Keyboard",
         "price": 45.0,
         "stock": 25,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.0
     },
@@ -28,6 +43,11 @@
         "name": "Monitor",
         "price": 299.99,
         "stock": 10,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.0
     },
@@ -36,6 +56,11 @@
         "name": "Speaker",
         "price": 50.0,
         "stock": 10,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.0
     },
@@ -44,6 +69,11 @@
         "name": "Webcam",
         "price": 80.0,
         "stock": 20,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.0
     },
@@ -52,31 +82,51 @@
         "name": "Charging Cable",
         "price": 50.0,
         "stock": 5,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.0
-    },
-    {
-        "id": "P101",
-        "name": "Guitar",
-        "price": 500.0,
-        "stock": 10,
-        "type": "physical",
-        "weight": 2.5
-    },
-    {
-        "id": "D201",
-        "name": "antiviuris",
-        "price": 79.9,
-        "stock": 100,
-        "type": "digital",
-        "download_size": 1500.0
     },
     {
         "id": "P200",
         "name": "HDMI Cable",
         "price": 10.0,
         "stock": 20,
+        "supplier": {
+            "supplier_id": "UNKNOWN",
+            "name": "Unassigned",
+            "contact_email": ""
+        },
         "type": "physical",
         "weight": 0.5
+    },
+    {
+        "id": "D201",
+        "name": "Antivirus",
+        "price": 79.9,
+        "stock": 100,
+        "supplier": {
+            "supplier_id": "5001",
+            "name": "Tech Supplies",
+            "contact_email": "contact@example.com"
+        },
+        "type": "digital",
+        "download_size": 1500.0
+    },
+    {
+        "id": "P101",
+        "name": "Guitar",
+        "price": 500.0,
+        "stock": 10,
+        "supplier": {
+            "supplier_id": "5001",
+            "name": "Tech Supplies",
+            "contact_email": "contact@example.com"
+        },
+        "type": "physical",
+        "weight": 2.5
     }
 ]
