@@ -44,7 +44,7 @@ class Product(ABC):
         self.__stock = new_stock
         return True
 
-    def display_information(self):
+    def display_information(self) -> None:
         print(f"ID: {self.__id}")
         print(f"Name: {self.__name}")
         print(f"Price: ${self.__price:.2f}")
