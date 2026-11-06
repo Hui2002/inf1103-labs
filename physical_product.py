@@ -16,17 +16,17 @@ class PhysicalProduct(Product):
         self.__weight = weight
 
 
-    def get_weight(self):
+    def get_weight(self) -> float:
         return self.__weight
 
-    def display_information(self):
+    def display_information(self) -> None:
         super().display_information()
         print(f"Weight: {self.__weight} kg")
 
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self) -> str:
         return "This product requires physical shipping."
 
-    def calculate_shipping_cost(self):
+    def calculate_shipping_cost(self) -> float:
         return self.__weight * 5.0
 
 CanBeShipped.register(PhysicalProduct)
