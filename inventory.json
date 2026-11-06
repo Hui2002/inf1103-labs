@@ -70,5 +70,13 @@
         "stock": 100,
         "type": "digital",
         "download_size": 1500.0
+    },
+    {
+        "id": "P200",
+        "name": "HDMI Cable",
+        "price": 10.0,
+        "stock": 20,
+        "type": "physical",
+        "weight": 0.5
     }
 ]
