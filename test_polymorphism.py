@@ -1,4 +1,3 @@
-
 from product import Product
 from supplier import Supplier
 from physical_product import PhysicalProduct
