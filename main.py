@@ -1,8 +1,6 @@
 from itertools import product
-
+from product_factory import ProductFactory
 from supplier import Supplier
-from physical_product import PhysicalProduct
-from digital_product import DigitalProduct
 from inventory import Inventory
 from file_handler import load_inventory, save_inventory
 
@@ -79,25 +77,27 @@ def add_product(inventory: Inventory) -> None:
         if product_type == "1":
             weight = float(input("Weight (kg): "))
 
-            product = PhysicalProduct(
+            product = ProductFactory.create(
+                "physical",
                 product_id,
                 product_name,
                 price,
                 stock,
-                weight,
-                supplier
+                supplier,
+                weight=weight
             )
 
         else:
             download_size = float(input("Download Size (MB): "))
 
-            product = DigitalProduct(
+            product = ProductFactory.create(
+                "digital",
                 product_id,
                 product_name,
                 price,
                 stock,
-                download_size,
-                supplier
+                supplier,
+                download_size=download_size
             )
 
         if inventory.add_product(product):
