@@ -1,0 +1,154 @@
+%% INF1103 Lab 9 — corrected from PyUML Generator output
+%% 14 classes: 8 existing Lab 8 classes + 6 Lab 9 classes
+%% Corrections: aggregation, composition, association, interface realization, factory dependency.
+classDiagram
+direction TB
+  %% module: can_be_shipped
+  namespace can_be_shipped {
+    class C1["can_be_shipped.CanBeShipped"] {
+      <<abstract>>
+      +calculate_shipping_cost() float*
+    }
+  }
+  %% module: digital_product
+  namespace digital_product {
+    class C2["digital_product.DigitalProduct"] {
+      -download_size
+      +init(product_id: str, name: str, price: float, stock: int, download_size: float, supplier: Supplier) None
+      +get_download_size() float
+      +display_information() None
+      +get_fulfilment_info() str
+    }
+  }
+  %% module: discount_strategy
+  namespace discount_strategy {
+    class C3["discount_strategy.BulkDiscount"] {
+      -float threshold
+      -float amount
+      +init(threshold: float, amount: float) None
+      +apply(total: float) float
+    }
+    class C4["discount_strategy.DiscountStrategy"] {
+      <<abstract>>
+      +apply(total: float) float*
+    }
+    class C5["discount_strategy.NoDiscount"] {
+      +apply(total: float) float
+    }
+    class C6["discount_strategy.PercentageDiscount"] {
+      -float percentage
+      +init(percentage: float) None
+      +apply(total: float) float
+    }
+    class C7["discount_strategy.StudentDiscount"] {
+      +apply(total: float) float
+    }
+  }
+  %% module: inventory
+  namespace inventory {
+    class C8["inventory.Inventory"] {
+      -list~Product~ products
+      +init() None
+      +add_product(product: Product) bool
+      +find_product(product_id: str) Product_or_None
+      +search_product(product_id: str) Product_or_None
+      +remove_product(product_id: str) bool
+      +display_all() None
+      +get_products() list~Product~
+    }
+  }
+  %% module: order
+  namespace order {
+    class C9["order.Order"] {
+      -str order_id
+      -list~OrderLine~ order_lines
+      -DiscountStrategy discount_strategy
+      +init(order_id: str, discount_strategy: DiscountStrategy_or_None) None
+      +get_order_id() str
+      +add_order_line(product: Product, quantity: int) None
+      +get_order_lines() tuple~OrderLine_many~
+      +remove_order_line(product_id: str) bool
+      +set_discount(discount_strategy: DiscountStrategy) None
+      +calculate_total() float
+    }
+  }
+  %% module: order_line
+  namespace order_line {
+    class C10["order_line.OrderLine"] {
+      +Product product
+      +int quantity
+      +init(product: Product, quantity: int) None
+      +calculate_subtotal() float
+    }
+  }
+  %% module: physical_product
+  namespace physical_product {
+    class C11["physical_product.PhysicalProduct"] {
+      -weight
+      +init(product_id: str, name: str, price: float, stock: int, weight: float, supplier: Supplier) None
+      +get_weight() float
+      +display_information() None
+      +get_fulfilment_info() str
+      +calculate_shipping_cost() float
+    }
+  }
+  %% module: product
+  namespace product {
+    class C12["product.Product"] {
+      <<abstract>>
+      -id
+      -name
+      -price
+      -stock
+      -Supplier supplier
+      +get_fulfilment_info() str*
+      +init(product_id: str, name: str, price: float, stock: int, supplier: Supplier) None
+      +get_supplier() Supplier
+      +get_id() str
+      +get_name() str
+      +get_price() float
+      +get_stock() int
+      +update_stock(new_stock: int) None
+      +display_information() None
+    }
+  }
+  %% module: product_factory
+  namespace product_factory {
+    class C13["product_factory.ProductFactory"] {
+      +create(product_type: str, product_id: str, name: str, price: float, stock_quantity: int, supplier: Supplier, weight: float_or_None, download_size: float_or_None) Product$
+    }
+  }
+  %% module: supplier
+  namespace supplier {
+    class C14["supplier.Supplier"] {
+      -supplier_id
+      -name
+      -contact_email
+      +init(supplier_id: str, name: str, contact_email: str) None
+      +get_supplier_id() str
+      +get_name() str
+      +get_contact_email() str
+      +display_information() None
+    }
+  }
+
+  %% Inheritance (hollow triangles pointing toward parents)
+  C12 <|-- C2
+  C12 <|-- C11
+  C4 <|-- C3
+  C4 <|-- C5
+  C4 <|-- C6
+  C4 <|-- C7
+
+  %% CanBeShipped abstract interface/contract (virtual subclass registration)
+  C1 <|.. C11
+
+  %% Lab 8 relationships
+  C8 "0..1" o-- "0..*" C12 : contains
+  C9 "1" *-- "0..*" C10 : owns
+  C10 "0..*" --> "1" C12 : product
+  C14 "1" -- "0..*" C12 : supplies
+
+  %% Lab 9 relationships
+  C9 "0..*" --> "1" C4 : uses
+  C13 ..> C12 : «creates»
