@@ -13,7 +13,20 @@ def display_menu():
     print("5. Save Inventory")
     print("6. Exit")
     print("--------------------------")
+    
+def get_positive_float(prompt: str) -> float:
+    while True:
+        try:
+            value = float(input(prompt))
 
+            if value <= 0:
+                print("Please enter a number greater than zero.")
+                continue
+
+            return value
+
+        except ValueError:
+            print("Please enter a valid number, e.g. 12.50")
 
 def add_product(inventory: Inventory) -> None:
     print("\nAdd New Product")
@@ -71,8 +84,8 @@ def add_product(inventory: Inventory) -> None:
         print("Existing supplier found and reused.")
 
     try:
-        price = float(input("Price: "))
         stock = int(input("Stock Quantity: "))
+        price = get_positive_float("Price: ")
 
         if product_type == "1":
             weight = float(input("Weight (kg): "))
@@ -107,9 +120,6 @@ def add_product(inventory: Inventory) -> None:
 
     except ValueError as error:
         print(f"Invalid product details: {error}")
-
-
-
 
 def update_stock(inventory):
     print("\nUpdate Stock")
