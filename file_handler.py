@@ -5,6 +5,7 @@ from supplier import Supplier
 from inventory import Inventory
 from physical_product import PhysicalProduct
 from digital_product import DigitalProduct
+from product_factory import ProductFactory
 
 FILENAME = "inventory.json"
 
@@ -59,31 +60,17 @@ def load_inventory() -> Inventory:
             )
 
         supplier = suppliers[supplier_id]
-
-        if product_type == "physical":
-            product = PhysicalProduct(
-                item["id"],
-                item["name"],
-                item["price"],
-                item["stock"],
-                item.get("weight", 0.0),
-                supplier
-            )
-
-        elif product_type == "digital":
-            product = DigitalProduct(
-                item["id"],
-                item["name"],
-                item["price"],
-                item["stock"],
-                item["download_size"],
-                supplier
-            )
-
-        else:
-            raise ValueError(
-                f"Unknown product type: {product_type}"
-            )
+        
+        product = product = ProductFactory.create(
+            product_type,
+            item["id"],
+            item["name"],
+            item["price"],
+            item["stock"],
+            supplier,
+            weight=item.get("weight", 0.0),
+            download_size=item.get("download_size")
+        )
 
         if not inventory.add_product(product):
             raise ValueError("Duplicate product ID in JSON.")
