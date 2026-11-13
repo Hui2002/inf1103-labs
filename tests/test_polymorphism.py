@@ -3,7 +3,7 @@ from supplier import Supplier
 from physical_product import PhysicalProduct
 from digital_product import DigitalProduct
 from inventory import Inventory
-from test_lsp import show_product_details
+from tests.test_lsp import show_product_details
 
 
 def test_polymorphism() -> None:
